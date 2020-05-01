@@ -5,8 +5,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import EditIcon from '@material-ui/icons/Edit';
 
-export default function AddCustomer(props) {
+export default function EditCustomer(props) {
 
     const [open, setOpen] = React.useState(false);
     const [customer, setCustomer] = React.useState({
@@ -14,6 +15,16 @@ export default function AddCustomer(props) {
     });
 
     const handleClickOpen = () => {
+      console.log(props.customer)
+      setCustomer({
+                  firstname: props.customer.firstname,
+                  lastname: props.customer.lastname,
+                  streetaddress: props.customer.streetaddress,
+                  postcode: props.customer.postcode, 
+                  city: props.customer.city,
+                  email: props.customer.email,
+                  phone: props.customer.phone
+                })
       setOpen(true);
     };
   
@@ -25,18 +36,18 @@ export default function AddCustomer(props) {
         setCustomer({ ...customer, [event.target.name]: event.target.value});
     }
 
-    const AddCustomer = () => {
-        props.saveCustomer(customer);
+    const updateCustomer = () => {
+        props.updateCustomer(customer, props.customer.links[0].href);
         handleClose();
     }
 
     return (
     <div>
-        <Button style={{margin: 10}} color="primary" onClick={handleClickOpen}>
-          Add customer
+        <Button color="primary" onClick={handleClickOpen}>
+        <EditIcon/>
         </Button>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">New customer</DialogTitle>
+            <DialogTitle id="form-dialog-title">Edit customer</DialogTitle>
             <DialogContent>
             <TextField
               autoFocus
@@ -100,7 +111,7 @@ export default function AddCustomer(props) {
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={AddCustomer} color="primary">
+            <Button onClick={updateCustomer} color="primary">
               Save
             </Button>
           </DialogActions>
