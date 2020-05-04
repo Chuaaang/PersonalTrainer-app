@@ -3,9 +3,10 @@ import 'react-table-v6/react-table.css'
 import ReactTable from 'react-table-v6';
 import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
-import AddCustomer from './AddTraining';
 import EditCustomer from './EditTraining'
 import DeleteIcon from '@material-ui/icons/Delete';
+import Axios from 'axios';
+import AddTraining from './AddTraining';
 
 export default function TrainingList() {
     const [trainings, setTrainings] = React.useState([]);
@@ -14,44 +15,32 @@ export default function TrainingList() {
     const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState([]);
 
-    const getTrainings = () => {
-        fetch('https://customerrest.herokuapp.com/api/trainings')
-            .then(response => response.json())
-            .then(
-                data => {
+    const getTrainings = async () => {
+        try {
+            const response = await Axios.get('https://customerrest.herokuapp.com/api/trainings/');
+            const data = response.data;
+            setTrainings(data.content)
+        } catch(err) {
+            console.error(err);
+        }
+    }
 
-                    let datas = data;
-                    datas.map((d,index) =>
 
-                    {
-                    if(d.customer != null)
-                    d.customer.name = d.customer.firstname + ' ' + d.customer.lastname
-                })
+    const getCustomers = async () => {
+        try {
+            const response = await Axios.get('https://customerrest.herokuapp.com/api/customers');
+            const data = response.data;
+            setCustomers(data.content);
+        } catch(err) {
+            console.error(err);
+        }
 
-                setTrainings(datas)
-
-                })
-            .catch(err => console.error(err))
     }
 
     React.useEffect(() => {
-        getCustomers();
         getTrainings();
-    }, [])
-
-
-    const getCustomers = () => {
-        fetch('https://customerrest.herokuapp.com/api/customers')
-            .then(response => response.json())
-            .then(data => setCustomers(data.content))
-            .catch(err => console.error(err))
-    }
-
-    React.useEffect(() => {
         getCustomers();
-        getTrainings();
     }, [])
-
 
     const deleteTrainings = (link) => {
         if (window.confirm("Are you sure?")) {
@@ -66,30 +55,15 @@ export default function TrainingList() {
         console.log(link);
     }
 
-    const saveTrainings = (customer) => {
-        fetch('https://customerrest.herokuapp.com/api/trainings', 
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(trainings)
-        })
-        .then(res => getTrainings())
-        .catch(err => console.error(err))
-    }
+    const AddTraining = async (training) => {
+        try {
+            const response = await Axios.post('https://customerrest.herokuapp.com/api/trainings');
+            getTrainings();
+        } catch(err) {
+            console.error(err);
+        }
+    } 
 
-    const updateTrainings = (trainings, link) => {
-        fetch(link, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(trainings)
-        })
-        .then(res => getTrainings())
-        .catch(err => console.error(err))
-    }
 
     const handleClose = () => {
         setOpen(false);
@@ -98,15 +72,6 @@ export default function TrainingList() {
 
 
     const columns = [
-
-
-        {
-            sortable: false,
-            filterable: false,
-            width:75,
-            Cell: row => (
-                <Button color="secondary" size="small" onClick={() => deleteTrainings(row.original.links[0].href)}> <DeleteIcon/> </Button>)
-        },
         {
             Header: 'Date',
             accessor: 'date'
@@ -116,8 +81,16 @@ export default function TrainingList() {
             accessor: 'duration'
         },
         {
+            Header: 'Activity',
+            accessor: 'activity'
+        },
+        {
             Header: 'Customer',
-            accessor: ''
+            accessor: 'firstname'
+        },
+        {
+            Header: 'Last name',
+            accessor: 'lastname'
         }
 
     ]
@@ -125,8 +98,7 @@ export default function TrainingList() {
 
     return (
         <div>
-            <AddCustomer saveTrainings={saveTrainings} />
-            <ReactTable data={customers} columns={columns} defaultPageSize={15} filterable={true} />
+            <ReactTable data={trainings} columns={columns} defaultPageSize={15} filterable={true} />
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} message={msg} />
         </div>
     )

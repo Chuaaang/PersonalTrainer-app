@@ -1,22 +1,22 @@
 import React from 'react';
-import axios from 'axios';
 import 'react-table-v6/react-table.css'
 import ReactTable from 'react-table-v6';
 import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import AddCustomer from './AddCustomer';
 import EditCustomer from './EditCustomer'
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/Delete';import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Axios from 'axios';
 
 export default function CustomerList() {
-    const [customers, setCustomers] = React.useState([]);
+    const [customers, setCustomers] = React.useState([{customer: {firstname: '', lastname: ''}}]);
     const [trainings, setTrainings] = React.useState([]);
 
-    const [open, setOpen] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
     const [msg, setMsg] = React.useState([]);
-
-
 
     const getCustomers = async () => {
         try {
@@ -35,40 +35,36 @@ export default function CustomerList() {
 
 
     const deleteCustomer = async (customerName, link) => {
+        if (window.confirm('Click OK to verify')) {
         const response = await Axios.delete(link);
         getCustomers();
         setMsg(`Customer ${customerName} deleted`);
         setOpen(true);
+        }
     }
 
-    const saveCustomer = (customer) => {
-        fetch('https://customerrest.herokuapp.com/api/customers', 
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(customer)
-        })
-        .then(res => getCustomers())
-        .catch(err => console.error(err))
+    const saveCustomer = async (customer) => {
+        try {
+        const response = await Axios.post('https://customerrest.herokuapp.com/api/customers', customer);
+        getCustomers();
+    } catch(err) {
+        console.error(err);
     }
+}
 
-    const updateCustomer = (customers, link) => {
-        fetch(link, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(customers)
-        })
-        .then(res => getCustomers())
-        .catch(err => console.error(err))
+    const updateCustomer = async (customers, link) => {
+        try {
+            const response = await Axios.put(link, customers);
+            getCustomers();
+        } catch(err) {
+            console.error(err);
+        }
     }
-
+    
     const handleClose = () => {
         setOpen(false);
     }
+
 
 
 
@@ -80,14 +76,19 @@ export default function CustomerList() {
             filterable: false,
             width:75,
             Cell: row => (
-            <EditCustomer updateCustomer={updateCustomer} customer={row.original} />)
+            <EditCustomer customer={row.original}  updateCustomer={updateCustomer} />)
         },
         {
             sortable: false,
             filterable: false,
             width:75,
             Cell: row => (
-                <Button color="secondary" size="small" onClick={() => deleteCustomer(row.original.links[0].href)}> <DeleteIcon/> </Button>)
+                <Button color="secondary" size="small" onClick={() => {
+                    const { firstname, lastname } = row.original;
+                    const { href: link } = row.original.links[0];
+                    deleteCustomer(`${firstname} ${lastname}`, link);
+                }} > <DeleteIcon/>
+                </Button>)
         },
         {
             Header: 'First Name',

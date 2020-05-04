@@ -19,12 +19,10 @@ function App() {
         </Toolbar>
       </AppBar>
       <BrowserRouter>
-        <div>
           <Link to="/">Customers</Link> <Link to="/traininglist">Trainings</Link> <Link to="/calendar">Calendar</Link>{' '}
           <Route path="/" exact component={Customers} />
           <Route path="/TrainingList/" component={TrainingList} />
           <Route path="/Calendar" component={Calendar} />
-        </div>
       </BrowserRouter>
     </div>
   );
