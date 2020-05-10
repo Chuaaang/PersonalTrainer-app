@@ -37,19 +37,10 @@ export default function AddCustomer(props) {
 
   return (
     <div>
-      <Button
-        variant="outlined"
-        style={{ margin: 10 }}
-        color="primary"
-        onClick={handleClickOpen}
-      >
+      <Button variant="outlined" style={{ margin: 10 }} color="primary" onClick={handleClickOpen}>
         Add customer
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">New customer</DialogTitle>
         <DialogContent>
           <TextField
@@ -61,54 +52,12 @@ export default function AddCustomer(props) {
             onChange={(e) => inputChanged(e)}
             fullWidth
           />
-          <TextField
-            margin="dense"
-            name="lastname"
-            value={customer.lastname}
-            label="Lastname"
-            onChange={inputChanged}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            name="streetaddress"
-            value={customer.streetaddress}
-            label="Street address"
-            onChange={inputChanged}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            name="postcode"
-            value={customer.postcode}
-            label="Postcode"
-            onChange={inputChanged}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            name="city"
-            value={customer.city}
-            label="City"
-            onChange={inputChanged}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            name="email"
-            value={customer.email}
-            label="Email"
-            onChange={inputChanged}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            name="phone"
-            value={customer.phone}
-            label="Phone"
-            onChange={inputChanged}
-            fullWidth
-          />
+          <TextField margin="dense" name="lastname" value={customer.lastname} label="Lastname" onChange={inputChanged} fullWidth />
+          <TextField margin="dense" name="streetaddress" value={customer.streetaddress} label="Street address" onChange={inputChanged} fullWidth />
+          <TextField margin="dense" name="postcode" value={customer.postcode} label="Postcode" onChange={inputChanged} fullWidth />
+          <TextField margin="dense" name="city" value={customer.city} label="City" onChange={inputChanged} fullWidth />
+          <TextField margin="dense" name="email" value={customer.email} label="Email" onChange={inputChanged} fullWidth />
+          <TextField margin="dense" name="phone" value={customer.phone} label="Phone" onChange={inputChanged} fullWidth />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

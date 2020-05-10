@@ -149,7 +149,7 @@ export default function CustomerList() {
 
   return (
     <div>
-      <AddCustomer saveCustomer={() => saveCustomer()} />
+      <AddCustomer saveCustomer={saveCustomer} />
       <ReactTable data={customers} columns={columns} defaultPageSize={15} filterable={true} />
       <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} message={msg} />
     </div>

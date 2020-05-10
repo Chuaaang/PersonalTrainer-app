@@ -66,7 +66,23 @@ export default function TrainingList() {
     setOpen(false);
   };
 
+  const deleteTraining = async (customerName, link) => {
+    if (window.confirm("Click OK to verify")) {
+      const response = await Axios.delete(link);
+      getTrainings();
+      setMsg("Training deleted");
+      setOpen(true);
+    }
+  };
+
   const columns = [
+    {
+      Cell: (row) => (
+        <Button color="secondary" size="small" onClick={() => deleteTrainings("https://customerrest.herokuapp.com/api/trainings/" + row.original.id)}>
+          Delete
+        </Button>
+      ),
+    },
     {
       id: "date",
       Header: "Date",
