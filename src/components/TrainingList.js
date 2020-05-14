@@ -5,7 +5,6 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Axios from "axios";
-import AddTraining from "./AddTraining";
 import Moment from "moment";
 
 export default function TrainingList() {

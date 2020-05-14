@@ -10,7 +10,7 @@ function App() {
     <div className="App">
       <AppBar position="static">
         <Toolbar>
-          <Typography>Personal Trainer</Typography>
+          <Typography variant="h6">Personal Trainer</Typography>
         </Toolbar>
         <MenuTab />
       </AppBar>
@@ -19,12 +19,3 @@ function App() {
 }
 
 export default App;
-/*
-<BrowserRouter>
-  <Link to="/">Customers</Link> <Link to="/traininglist">Trainings</Link>{" "}
-  <Link to="/calendar">Calendar</Link>{" "}
-  <Route path="/" exact component={Customers} />
-  <Route path="/TrainingList/" component={TrainingList} />
-  <Route path="/Calendar" component={Calendar} />
-</BrowserRouter>;
-*/
